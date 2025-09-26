@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel= "icon" type="image/x-icon" href="logo2.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candore Bioscience - Fingerprint Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f1b35 0%, #1e3a5f 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #2c3e50;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 450px;
+        }
+        
+        .login-container, .forgot-password-container {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 12px;
+            padding: 35px;
+            width: 100%;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .login-container.active, .forgot-password-container.active {
+            display: block;
+        }
+        
+        .app-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: none;
+            position: relative;
+        }
+        
+        .app-container.active {
+            display: block;
+        }
+        
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 32px;
+            color: #3498db;
+            margin-right: 10px;
+        }
+        
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            color: #7f8c8d;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e7ff;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: #f8faff;
+            padding-right: 45px;
+        }
+        
+        .form-group input:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            cursor: pointer;
+            color: #7f8c8d;
+            background: none;
+            border: none;
+            font-size: 18px;
+        }
+        
+        .password-requirements {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn-small {
+            width: auto;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            margin-top: 0;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2980b9 0%, #1a2530 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60 0%, #219653 100%);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(135deg, #219653 0%, #1e8449 100%);
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #7f8c8d 0%, #6c7b7d 100%);
+            transform: translateY(-2px);
+        }
+        
+        .btn-info {
+            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            color: white;
+            padding: 10px 15px;
+            width: auto;
+            margin-left: 10px;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 8px;
+            display: none;
+            text-align: center;
+        }
+        
+        .success-message {
+            color: #27ae60;
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(39, 174, 96, 0.1);
+            border-radius: 8px;
+            display: none;
+            text-align: center;
+        }
+        
+        .forgot-password-link {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            display: inline-block;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .forgot-password-link:hover {
+            text-decoration: underline;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid #3498db;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card.registered-fingerprints {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card.registered-fingerprints .fingerprint-list {
+            flex-grow: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e7ff;
+        }
+        
+        .card-header i {
+            font-size: 24px;
+            margin-right: 10px;
+            color: #3498db;
+        }
+        
+        .card-header h2 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .status-info, .account-info, .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .status-item, .account-item, .contact-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dashed #e0e7ff;
+            align-items: center;
+        }
+        
+        #contact-page .contact-item {
+            justify-content: flex-start;
+        }
+
+        #contact-page .contact-item i {
+            color: #3498db;
+            margin-right: 15px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .status-item:last-child, .account-item:last-child, .contact-item:last-child {
+            border-bottom: none;
+        }
+        
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .fingerprint-list {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .fingerprint-item, .wifi-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f8faff;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            border-left: 4px solid #3498db;
+        }
+        
+        .fingerprint-item:hover, .wifi-item:hover {
+            background: #eef5ff;
+            transform: translateX(5px);
+        }
+        
+        .fingerprint-info, .wifi-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .fingerprint-name, .wifi-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .fingerprint-details, .wifi-details {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+        
+        .fingerprint-id {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 36px;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        
+        .fingerprint-main {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .wifi-main {
+            display: flex;
+            align-items: center;
+        }
+        
+        .fingerprint-actions, .wifi-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .delete-btn {
+            width: 75px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .delete-btn i {
+            margin-left: 8px;
+        }
+        
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .log-container {
+            max-height: 500px;
+            overflow-y: auto;
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Fira Code', monospace;
+            margin-top: 20px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .log-entry {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+        
+        .log-time {
+            color: #3498db;
+            margin-right: 10px;
+            font-weight: 600;
+        }
+        
+        .connection-status {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            background: #f8faff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .status-indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .status-connected {
+            background: #27ae60;
+            box-shadow: 0 0 10px #27ae60;
+        }
+        
+        .status-disconnected {
+            background: #e74c3c;
+            box-shadow: 0 0 10px #e74c3c;
+        }
+        
+        .user-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard, .page-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .user-bar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .user-info {
+                margin-bottom: 10px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .login-container, .forgot-password-container {
+                padding: 25px;
+            }
+            
+            .btn-info {
+                margin-left: 0;
+                margin-top: 10px;
+                width: 100%;
+            }
+            
+            .log-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .modal-content p {
+            font-size: 1.1rem;
+            color: #34495e;
+            margin-bottom: 25px;
+        }
+        .modal-content .btn {
+            width: auto;
+            min-width: 120px;
+            margin: 0 10px;
+        }
+        #generic-modal-buttons {
+            display: flex;
+            justify-content: center;
+        }
+        .spinner {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .log-panel, .nav-panel {
+            position: fixed;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            transition: transform 0.3s ease;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .log-panel {
+            right: 0;
+            transform: translateX(100%);
+        }
+        .log-panel.active {
+            transform: translateX(0);
+        }
+
+        .nav-panel {
+            left: 0;
+            transform: translateX(-100%);
+        }
+        .nav-panel.active {
+            transform: translateX(0);
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e7ff;
+        }
+        
+        .toggle-btn {
+            position: fixed;
+            top: 20px;
+            z-index: 998;
+            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #toggle-log-btn {
+            right: 20px;
+        }
+        #toggle-nav-btn {
+            left: 20px;
+        }
+        
+        .toggle-btn i {
+            font-size: 20px;
+        }
+        /* Hide user bar on specific pages */
+        #contact-page.active ~ .user-bar,
+        #about-page.active ~ .user-bar,
+        #wifi-page.active ~ .user-bar {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .log-panel, .nav-panel {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-container active" id="login-container">
+            <div class="header">
+                <div class="logo">
+                    <div>
+                        <img src="logo3.jpg" height="120" width="135">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password">
+                <button type="button" id="togglePassword" class="password-toggle">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+            
+            <button class="btn btn-primary" id="login-btn">
+                <i class="fas fa-lock"></i> Login
+            </button>
+            
+            <a class="forgot-password-link" id="forgot-password-link">Forgot your password?</a>
+            
+            <div class="error-message" id="error-message">
+                Invalid username or password. Please try again.
+            </div>
+        </div>
+        
+        <div class="forgot-password-container" id="forgot-password-container">
+            <div class="header">
+                <div class="logo">
+                    <div class="logo-text">Candore</div>
+                </div>
+            </div>
+            <h1>Company Code Login</h1>
+            <p class="subtitle">Enter the login code provided by your administrator.</p>
+            <div class="form-group">
+                <label for="login-code">Login Code</label>
+                <input type="password" id="login-code" placeholder="Enter company code">
+            </div>
+            <button class="btn btn-primary" id="code-login-btn">
+                <i class="fas fa-shield-alt"></i> Login with Code
+            </button>
+            <button class="btn btn-secondary" id="back-to-login-btn">
+                <i class="fas fa-arrow-left"></i> Back to Login
+            </button>
+            <div class="error-message" id="code-error-message">
+                Invalid or expired code. Please try again.
+            </div>
+        </div>
+    </div>
+    
+    <div class="app-container" id="app-container">
+        <button class="toggle-btn" id="toggle-nav-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <button class="toggle-btn" id="toggle-log-btn">
+            <i class="fas fa-terminal"></i>
+        </button>
+
+        <div class="header">
+            <div class="logo">
+                <div class="logo-text">Candore Bioscience</div>
+            </div>
+        </div>
+        
+        <div id="dashboard-page" class="page active">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-fingerprint"></i>
+                        <h2>Add New Fingerprint</h2>
+                    </div>
+                    <div class="form-group">
+                        <label for="fingerprint-name">Name <span style="color: #e74c3c;">*</span></label>
+                        <input type="text" id="fingerprint-name" placeholder="Enter person's name">
+                    </div>
+                    <div class="form-group">
+                        <label for="fingerprint-id">ID <span style="color: #e74c3c;">*</span></label>
+                        <input type="number" id="fingerprint-id" placeholder="Enter ID number" min="1" step="1" oninput="validity.valid||(value='');">
+                        <div class="password-requirements">
+                            Must be a positive integer (e.g., 1, 2, 3...)
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="enroll-btn">
+                        <i class="fas fa-plus-circle"></i> Enroll New Fingerprint
+                    </button>
+                    <div class="instructions">
+                        <p style="margin-top: 20px; color: #7f8c8d;">
+                            <strong>Instructions:</strong> Click "Enroll New Fingerprint", then place your finger on the sensor when prompted. You may need to scan multiple times.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="card registered-fingerprints">
+                    <div class="card-header">
+                        <i class="fas fa-list"></i>
+                        <h2>Registered Fingerprints</h2>
+                    </div>
+                    <div class="fingerprint-list" id="fingerprint-list">
+                    </div>
+                    <button class="btn btn-danger" id="delete-all-btn" style="margin-top: auto; width: 100%;">
+                        <i class="fas fa-trash"></i> Delete All Fingerprints
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-info-circle"></i>
+                        <h2>System Status</h2>
+                    </div>
+                    <div class="status-info">
+                        <div class="status-item">
+                            <span>Fingerprint Sensor:</span>
+                            <span class="status-value" id="sensor-status" style="font-weight: 600;">Unknown</span>
+                        </div>
+                        <div class="status-item">
+                            <span>Fingerprints Stored:</span>
+                            <span class="status-value" id="fingerprint-count">0</span>
+                        </div>
+                        <div class="status-item">
+                            <span>Current WiFi:</span>
+                            <span class="status-value" id="dashboard-ssid" style="font-weight: 600;">N/A</span>
+                        </div>
+                        <div class="status-item">
+                            <span>ESP32 Connection:</span>
+                            <span class="status-value" id="esp32-connection" style="color: #e74c3c; font-weight: 600;">Disconnected</span>
+                        </div>
+                        <div class="status-item">
+                            <span>Last Access:</span>
+                            <span class="status-value" id="last-access">N/A</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="refresh-btn">
+                            <i class="fas fa-sync-alt"></i> Refresh Status
+                        </button>
+                        <button class="btn btn-success" id="lock-btn">
+                            <i class="fas fa-lock"></i> Lock Device
+                        </button>
+                        <button class="btn btn-success" id="unlock-btn">
+                            <i class="fas fa-lock-open"></i> Unlock Device
+                        </button>
+                    </div>
+                    <div class="connection-status">
+                        <div id="connection-indicator" class="status-indicator status-disconnected"></div>
+                        <span id="connection-text">Disconnected from Device</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="account-page" class="page">
+            <div class="page-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-user-shield"></i><h2>Account Details</h2>
+                    </div>
+                    <div class="account-info">
+                        <div class="account-item">
+                            <span>Username:</span>
+                            <span id="account-username" style="font-weight: 600;">Admin</span>
+                        </div>
+                        <div class="account-item">
+                            <span>Date of Purchase:</span>
+                            <span id="account-purchase-date" style="font-weight: 600;">20/09/2025</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-key"></i><h2>Password Management</h2>
+                    </div>
+                    <p style="margin-bottom: 20px;">For security, you can update your password here.</p>
+                    <button class="btn btn-primary" id="change-password-btn">
+                        <i class="fas fa-edit"></i> Change Password
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="contact-page" class="page">
+             <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-envelope"></i><h2>Contact Us</h2>
+                </div>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-building"></i>
+                        <span><strong>Company:</strong> Candore Bioscience</span>
+                    </div>
+                    <div class="contact-item">
+                         <i class="fas fa-map-marker-alt"></i>
+                        <span><strong>Head Office:</strong> 1st Floor, Shashwat Complex, Naranpura, Ahmedabad, Gujarat, India</span>
+                    </div>
+                    <div class="contact-item">
+                         <i class="fas fa-industry"></i>
+                        <span><strong>Manufacturing Facility:</strong> 5, Prime Industrial Park-2, Santej-Vadsar Road, Gandhinagar, Gujarat, India</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span><strong>Phone:</strong> +91 78747 77123</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-globe"></i>
+                        <span><strong>Main Website:</strong> <a href="http://www.candore.in" target="_blank" style="color: #3498db; text-decoration: none;">www.candore.in</a></span>
+                    </div>
+                     <div class="contact-item">
+                        <i class="fas fa-at"></i>
+                        <span><strong>Email:</strong> info@candore.in</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="about-page" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-info-circle"></i><h2>About Us</h2>
+                </div>
+                <p>Candore Bioscience is a pioneer in creating secure and intuitive biometric solutions. Our fingerprint management system is designed to provide robust security with a user-friendly interface, ensuring that your assets are protected with state-of-the-art technology. We are committed to innovation, reliability, and customer satisfaction.</p>
+            </div>
+        </div>
+
+        <!-- WIFI PAGE -->
+        <div id="wifi-page" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-wifi"></i><h2>WiFi Management</h2>
+                </div>
+                <div class="status-info">
+                    <div class="status-item">
+                        <span>Current Network:</span>
+                        <span class="status-value" id="current-ssid" style="font-weight: 600;">N/A</span>
+                    </div>
+                </div>
+
+                <!-- Manual Connection Form -->
+                <div style="text-align: center; margin: 20px 0 10px 0; color: #7f8c8d; font-weight: 500;">CONNECT TO A NETWORK</div>
+                <div class="form-group">
+                    <label for="manual-ssid">Network Name (SSID)</label>
+                    <input type="text" id="manual-ssid" placeholder="Enter network name">
+                </div>
+                <div class="form-group">
+                    <label for="manual-password">Password</label>
+                    <input type="password" id="manual-password" placeholder="Leave blank for open networks">
+                    <button type="button" id="toggle-wifi-password" class="password-toggle">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <button class="btn btn-success" id="manual-connect-btn" style="width: 100%; margin-top: 0; margin-bottom: 20px;">
+                    <i class="fas fa-plug"></i> Connect
+                </button>
+            </div>
+        </div>
+        <!-- END OF WIFI PAGE -->
+
+        <div class="user-bar">
+            <div class="user-info">
+                <div class="user-avatar">A</div>
+                <div>
+                    <div>Admin User</div>
+                    <small>Logged in to Candore Bioscience</small>
+                </div>
+            </div>
+            <button class="btn btn-danger btn-small" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <div class="nav-panel" id="nav-panel">
+        <div class="panel-header">
+            <h2>Navigation</h2>
+            <button class="btn btn-info" id="close-nav-btn">
+                <i class="fas fa-times"></i> Close
+            </button>
+        </div>
+        <button class="btn btn-primary nav-btn" data-page="dashboard-page" style="margin-bottom: 10px; justify-content: flex-start;"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+        <button class="btn btn-primary nav-btn" data-page="wifi-page" style="margin-bottom: 10px; justify-content: flex-start;"><i class="fas fa-wifi"></i> WiFi Settings</button>
+        <button class="btn btn-primary nav-btn" data-page="account-page" style="margin-bottom: 10px; justify-content: flex-start;"><i class="fas fa-user-circle"></i> Account</button>
+        <button class="btn btn-primary nav-btn" data-page="contact-page" style="margin-bottom: 10px; justify-content: flex-start;"><i class="fas fa-envelope"></i> Contact Us</button>
+        <button class="btn btn-primary nav-btn" data-page="about-page" style="margin-bottom: 10px; justify-content: flex-start;"><i class="fas fa-info-circle"></i> About Us</button>
+    </div>
+
+    <div class="log-panel" id="log-panel">
+        <div class="panel-header">
+            <h2>Activity Log</h2>
+            <button class="btn btn-info" id="close-log-btn">
+                <i class="fas fa-times"></i> Close
+            </button>
+        </div>
+        <div class="log-panel-actions" style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <button class="btn btn-info" id="download-log-btn" style="flex-grow: 1; margin-top: 0;">
+                <i class="fas fa-download"></i> Download CSV
+            </button>
+            <button class="btn btn-danger" id="delete-log-btn" style="flex-grow: 1; margin-top: 0;">
+                <i class="fas fa-trash-alt"></i> Delete Log
+            </button>
+        </div>
+        <div class="log-container" id="log-container">
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="enroll-modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Fingerprint Enrollment</h2>
+            <p id="modal-instruction">Starting...</p>
+            <div class="spinner" id="modal-spinner"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="password-change-modal">
+        <div class="modal-content">
+            <div id="password-step1">
+                <h2>Verify Current Password</h2>
+                <div class="form-group">
+                    <label for="old-password">Old Password</label>
+                    <input type="password" id="old-password" placeholder="Enter your current password">
+                </div>
+                <button class="btn btn-primary" id="verify-password-btn">Verify</button>
+            </div>
+            <div id="password-step2" style="display:none;">
+                <h2>Set New Password</h2>
+                <div class="form-group">
+                    <label for="new-password">New Password</label>
+                    <input type="password" id="new-password" placeholder="Enter new password">
+                </div>
+                 <div class="form-group">
+                    <label for="confirm-password">Confirm New Password</label>
+                    <input type="password" id="confirm-password" placeholder="Confirm new password">
+                </div>
+                <button class="btn btn-primary" id="set-password-btn">Set New Password</button>
+            </div>
+             <p class="error-message" id="password-error" style="margin-top: 15px;"></p>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="generic-modal">
+        <div class="modal-content">
+            <h2 id="generic-modal-title">Notification</h2>
+            <p id="generic-modal-message">This is a message.</p>
+            <div id="generic-modal-buttons">
+                <button class="btn btn-primary" id="generic-modal-ok">OK</button>
+                <button class="btn btn-secondary" id="generic-modal-cancel" style="display: none;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Element Selectors ---
+        const loginContainer = document.getElementById('login-container');
+        const appContainer = document.getElementById('app-container');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const errorMessage = document.getElementById('error-message');
+        const logContainer = document.getElementById('log-container');
+        const enrollBtn = document.getElementById('enroll-btn');
+        const deleteAllBtn = document.getElementById('delete-all-btn');
+        const refreshBtn = document.getElementById('refresh-btn');
+        const lockBtn = document.getElementById('lock-btn');
+        const unlockBtn = document.getElementById('unlock-btn');
+        const enrollModal = document.getElementById('enroll-modal');
+        const modalInstruction = document.getElementById('modal-instruction');
+        const passwordInput = document.getElementById('password');
+        const togglePasswordBtn = document.getElementById('togglePassword');
+        const fingerprintList = document.getElementById('fingerprint-list');
+        const downloadLogBtn = document.getElementById('download-log-btn');
+        const deleteLogBtn = document.getElementById('delete-log-btn');
+
+        // --- Panel & Page Selectors ---
+        const logPanel = document.getElementById('log-panel');
+        const toggleLogBtn = document.getElementById('toggle-log-btn');
+        const closeLogBtn = document.getElementById('close-log-btn');
+        const navPanel = document.getElementById('nav-panel');
+        const toggleNavBtn = document.getElementById('toggle-nav-btn');
+        const closeNavBtn = document.getElementById('close-nav-btn');
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const pages = document.querySelectorAll('.page');
+
+        // --- Forgot Password / Company Code Elements ---
+        const forgotPasswordLink = document.getElementById('forgot-password-link');
+        const forgotPasswordContainer = document.getElementById('forgot-password-container');
+        const backToLoginBtn = document.getElementById('back-to-login-btn');
+        const codeLoginBtn = document.getElementById('code-login-btn');
+        const codeErrorMessage = document.getElementById('code-error-message');
+
+        // --- Status Panel Elements ---
+        const sensorStatusEl = document.getElementById('sensor-status');
+        const fingerprintCountEl = document.getElementById('fingerprint-count');
+        const lastAccessEl = document.getElementById('last-access');
+        const esp32ConnectionEl = document.getElementById('esp32-connection');
+        const connectionIndicator = document.getElementById('connection-indicator');
+        const connectionText = document.getElementById('connection-text');
+        const dashboardSsidEl = document.getElementById('dashboard-ssid');
+
+        // --- Password Change Modal ---
+        const changePasswordBtn = document.getElementById('change-password-btn');
+        const passwordChangeModal = document.getElementById('password-change-modal');
+        const passwordStep1 = document.getElementById('password-step1');
+        const passwordStep2 = document.getElementById('password-step2');
+        const oldPasswordInput = document.getElementById('old-password');
+        const verifyPasswordBtn = document.getElementById('verify-password-btn');
+        const newPasswordInput = document.getElementById('new-password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const setPasswordBtn = document.getElementById('set-password-btn');
+        const passwordError = document.getElementById('password-error');
+
+        // --- WiFi Page Elements ---
+        const currentSsidEl = document.getElementById('current-ssid');
+        const manualSsidInput = document.getElementById('manual-ssid');
+        const manualPasswordInput = document.getElementById('manual-password');
+        const manualConnectBtn = document.getElementById('manual-connect-btn');
+        const toggleWifiPasswordBtn = document.getElementById('toggle-wifi-password');
+
+        // --- Generic Modal Elements & Logic ---
+        const genericModal = document.getElementById('generic-modal');
+        const genericModalTitle = document.getElementById('generic-modal-title');
+        const genericModalMessage = document.getElementById('generic-modal-message');
+        const genericModalOk = document.getElementById('generic-modal-ok');
+        const genericModalCancel = document.getElementById('generic-modal-cancel');
+        let confirmResolve = null;
+
+        function showModal(title, message) {
+            genericModalTitle.textContent = title;
+            genericModalMessage.textContent = message;
+            genericModalOk.textContent = 'OK';
+            genericModalOk.style.display = 'inline-flex';
+            genericModalCancel.style.display = 'none';
+            genericModal.style.display = 'flex';
+            return new Promise(resolve => {
+                genericModalOk.onclick = () => {
+                    genericModal.style.display = 'none';
+                    resolve(true);
+                };
+            });
+        }
+
+        function showConfirm(title, message) {
+            genericModalTitle.textContent = title;
+            genericModalMessage.textContent = message;
+            genericModalOk.textContent = 'Confirm';
+            genericModalOk.style.display = 'inline-flex';
+            genericModalCancel.style.display = 'inline-flex';
+            genericModal.style.display = 'flex';
+            return new Promise(resolve => {
+                confirmResolve = resolve;
+            });
+        }
+        
+        genericModalOk.addEventListener('click', () => {
+            if (confirmResolve) {
+                genericModal.style.display = 'none';
+                confirmResolve(true);
+                confirmResolve = null;
+            }
+        });
+
+        genericModalCancel.addEventListener('click', () => {
+            if (confirmResolve) {
+                genericModal.style.display = 'none';
+                confirmResolve(false);
+                confirmResolve = null;
+            }
+        });
+
+        // --- Credentials & WebSocket Setup ---
+        let defaultUsername = "admin";
+        let defaultPassword = localStorage.getItem('userPassword') || "admin@123";
+        const validCodes = new Set([
+            'xY7zP2qA', 'R8wV4nK9', 'mJ6bF1cD', 'T3gH5sE7', 'kL9zX6vN',
+            'pS2hG4jM', 'aZ1xY8wB', 'cV5bN6mQ', 'uI7oP3rT', 'eD4fG2hJ'
+        ]);
+        var gateway = `ws://${window.location.hostname}/ws`;
+        var websocket;
+
+        function initWebSocket() {
+            websocket = new WebSocket(gateway);
+            websocket.onopen    = onOpen;
+            websocket.onclose   = onClose;
+            websocket.onmessage = onMessage;
+        }
+
+        function onOpen(event) {
+            addLogEntry('WebSocket connection established.', 'success');
+            esp32ConnectionEl.textContent = 'Connected';
+            esp32ConnectionEl.style.color = '#27ae60';
+            connectionIndicator.className = 'status-indicator status-connected';
+            connectionText.textContent = 'Connected to Device';
+            websocket.send(JSON.stringify({ command: 'get_status' }));
+            websocket.send(JSON.stringify({ command: 'get_fingerprints' }));
+        }
+
+        function onClose(event) {
+            addLogEntry('WebSocket connection lost. Retrying...', 'error');
+            esp32ConnectionEl.textContent = 'Disconnected';
+            esp32ConnectionEl.style.color = '#e74c3c';
+            connectionIndicator.className = 'status-indicator status-disconnected';
+            connectionText.textContent = 'Disconnected from Device';
+            sensorStatusEl.textContent = 'Unknown';
+            sensorStatusEl.style.color = '#e74c3c';
+            setTimeout(initWebSocket, 2000);
+        }
+
+        async function onMessage(event) {
+            const data = JSON.parse(event.data);
+
+            if (data.type === 'enroll_status') {
+                modalInstruction.textContent = data.message;
+                if (data.status === 'error') {
+                    addLogEntry(`Enrollment failed: ${data.message}`, 'error');
+                    setTimeout(() => { 
+                        enrollModal.style.display = 'none'; 
+                        showModal('Enrollment Failed', data.message);
+                    }, 2500);
+                }
+            } else if (data.type === 'enroll_success') {
+                modalInstruction.textContent = 'Enrollment Complete!';
+                addLogEntry(`Enrollment successful for ${data.name} (ID: ${data.id})`, 'success');
+                addFingerprintToListDOM(data.name, data.id);
+                setTimeout(() => { enrollModal.style.display = 'none'; }, 2000);
+            } else if (data.type === 'delete_status') {
+                if (data.status === 'success') {
+                    addLogEntry(`Successfully deleted fingerprint ID: ${data.id}`, 'success');
+                    removeFingerprintFromListDOM(data.id);
+                } else {
+                    addLogEntry(`Failed to delete fingerprint ID: ${data.id}`, 'error');
+                    await showModal('Error', `Could not delete fingerprint with ID ${data.id}.`);
+                }
+            } else if (data.type === 'delete_all_status') {
+                if (data.status === 'success') {
+                    addLogEntry(data.message, 'success');
+                    fingerprintList.innerHTML = '<p style="text-align: center; padding: 20px; color: #7f8c8d; font-style: italic;">No any fingerprints</p>';
+                    await showModal('Success', data.message);
+                } else {
+                    addLogEntry(`Error: ${data.message}`, 'error');
+                    await showModal('Error', data.message);
+                }
+            } else if (data.type === 'status_update') {
+                if (data.sensorConnected) {
+                    sensorStatusEl.textContent = 'Active';
+                    sensorStatusEl.style.color = '#27ae60';
+                } else {
+                    sensorStatusEl.textContent = 'Inactive';
+                    sensorStatusEl.style.color = '#e74c3c';
+                }
+                fingerprintCountEl.textContent = data.fingerprintCount;
+                currentSsidEl.textContent = data.currentSSID || 'N/A';
+                dashboardSsidEl.textContent = data.currentSSID || 'N/A';
+            } else if (data.type === 'fingerprint_list') {
+                fingerprintList.innerHTML = ''; 
+                if (data.fingerprints && data.fingerprints.length > 0) {
+                    data.fingerprints.forEach(fp => {
+                        addFingerprintToListDOM(fp.name, fp.id);
+                    });
+                } else {
+                     fingerprintList.innerHTML = '<p style="text-align: center; padding: 20px; color: #7f8c8d; font-style: italic;">No any fingerprints</p>';
+                }
+            } else if (data.type === 'access_event') {
+                const time = new Date().toLocaleTimeString();
+                const accessText = `${data.name} (ID: ${data.id}) at ${time}`;
+                lastAccessEl.textContent = accessText;
+                addLogEntry(`Access granted for ${data.name} (ID: ${data.id})`, 'success');
+            } else if (data.type === 'access_denied') {
+                addLogEntry('Unauthorized access attempt detected.', 'error');
+            } else if (data.type === 'wifi_status') {
+                if (data.status === 'success') {
+                    await showModal('WiFi Connection Success', `${data.message}. The device will now restart.`);
+                } else {
+                    await showModal('WiFi Connection Failed', data.message);
+                }
+            }
+        }
+        
+        window.addEventListener('load', initWebSocket);
+
+        function loadLogFromStorage() {
+            const logs = JSON.parse(localStorage.getItem('activityLog')) || [];
+            logContainer.innerHTML = '';
+            for (let i = logs.length - 1; i >= 0; i--) {
+                const log = logs[i];
+                const logEntry = document.createElement('div');
+                logEntry.className = 'log-entry';
+                let icon = (log.type === 'success') ? '✅ ' : (log.type === 'error') ? '❌ ' : '➡️ ';
+                logEntry.innerHTML = `<span class="log-time">${log.time}</span><span>${icon}${log.message}</span>`;
+                logContainer.append(logEntry);
+            }
+        }
+
+        function addFingerprintToListDOM(name, id) {
+            const placeholder = fingerprintList.querySelector('p');
+            if (placeholder) {
+                fingerprintList.innerHTML = '';
+            }
+
+            const item = document.createElement('div');
+            item.className = 'fingerprint-item';
+            item.setAttribute('data-id', id);
+            item.innerHTML = `
+                <div class="fingerprint-main">
+                    <span class="fingerprint-id">${id}</span>
+                    <div class="fingerprint-info">
+                        <span class="fingerprint-name">${name}</span>
+                        <span class="fingerprint-details">Added: ${new Date().toLocaleDateString()}</span>
+                    </div>
+                </div>
+                <div class="fingerprint-actions">
+                    <button class="btn btn-danger delete-btn" title="Delete Fingerprint"><i class="fas fa-trash"></i></button>
+                </div>`;
+            item.querySelector('.delete-btn').addEventListener('click', async function() {
+                const confirmed = await showConfirm('Confirm Deletion', `Are you sure you want to delete the fingerprint for ${name} (ID: ${id})?`);
+                if (confirmed) {
+                    websocket.send(JSON.stringify({ command: 'delete', id: parseInt(id) }));
+                }
+            });
+            fingerprintList.appendChild(item);
+        }
+
+        function removeFingerprintFromListDOM(id) {
+            const itemToRemove = fingerprintList.querySelector(`.fingerprint-item[data-id='${id}']`);
+            if (itemToRemove) itemToRemove.remove();
+            if (fingerprintList.children.length === 0) {
+                fingerprintList.innerHTML = '<p style="text-align: center; padding: 20px; color: #7f8c8d; font-style: italic;">No any fingerprints</p>';
+            }
+        }
+
+        function addLogEntry(message, type = 'info') {
+            const time = new Date().toTimeString().split(' ')[0];
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            let icon = (type === 'success') ? '✅ ' : (type === 'error') ? '❌ ' : '➡️ ';
+            logEntry.innerHTML = `<span class="log-time">${time}</span><span>${icon}${message}</span>`;
+            logContainer.prepend(logEntry);
+
+            let logs = JSON.parse(localStorage.getItem('activityLog')) || [];
+            logs.unshift({ time, message, type });
+            if (logs.length > 200) {
+                logs.pop();
+            }
+            localStorage.setItem('activityLog', JSON.stringify(logs));
+        }
+        
+        loadLogFromStorage();
+        loginContainer.classList.add('active');
+        
+        const dashboardButton = document.querySelector('.nav-btn[data-page="dashboard-page"]');
+
+        function setInitialActivePage() {
+             pages.forEach(page => page.classList.remove('active'));
+             document.getElementById('dashboard-page').classList.add('active');
+             setActiveNavButton(dashboardButton);
+        }
+
+        loginBtn.addEventListener('click', () => {
+            if (document.getElementById('username').value === defaultUsername && passwordInput.value === defaultPassword) {
+                loginContainer.classList.remove('active');
+                appContainer.classList.add('active');
+                setInitialActivePage();
+            } else {
+                errorMessage.style.display = 'block';
+                setTimeout(() => { errorMessage.style.display = 'none'; }, 3000);
+            }
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            window.location.reload();
+        });
+
+        forgotPasswordLink.addEventListener('click', () => {
+            loginContainer.classList.remove('active');
+            forgotPasswordContainer.classList.add('active');
+        });
+
+        backToLoginBtn.addEventListener('click', () => {
+            forgotPasswordContainer.classList.remove('active');
+            loginContainer.classList.add('active');
+        });
+        
+        codeLoginBtn.addEventListener('click', () => {
+            const enteredCode = document.getElementById('login-code').value;
+            if (validCodes.has(enteredCode)) {
+                validCodes.delete(enteredCode);
+                addLogEntry(`Logged in with one-time code: ${enteredCode}`, 'success');
+                forgotPasswordContainer.classList.remove('active');
+                appContainer.classList.add('active');
+                setInitialActivePage();
+            } else {
+                codeErrorMessage.style.display = 'block';
+                setTimeout(() => { codeErrorMessage.style.display = 'none'; }, 3000);
+            }
+        });
+
+        togglePasswordBtn.addEventListener('click', function() {
+            passwordInput.type = (passwordInput.type === 'password') ? 'text' : 'password';
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+
+        toggleLogBtn.addEventListener('click', () => logPanel.classList.toggle('active'));
+        closeLogBtn.addEventListener('click', () => logPanel.classList.remove('active'));
+        
+        toggleNavBtn.addEventListener('click', () => navPanel.classList.toggle('active'));
+        closeNavBtn.addEventListener('click', () => navPanel.classList.remove('active'));
+        
+        function setActiveNavButton(activeButton) {
+            navButtons.forEach(btn => {
+                btn.classList.remove('btn-danger');
+                btn.classList.add('btn-primary');
+            });
+            if (activeButton) {
+                activeButton.classList.remove('btn-primary');
+                activeButton.classList.add('btn-danger');
+            }
+        }
+
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetPageId = button.getAttribute('data-page');
+                pages.forEach(page => {
+                    page.classList.toggle('active', page.id === targetPageId);
+                });
+                setActiveNavButton(button);
+                navPanel.classList.remove('active');
+            });
+        });
+
+        changePasswordBtn.addEventListener('click', () => {
+            passwordError.style.display = 'none';
+            oldPasswordInput.value = '';
+            newPasswordInput.value = '';
+            confirmPasswordInput.value = '';
+            passwordStep2.style.display = 'none';
+            passwordStep1.style.display = 'block';
+            passwordChangeModal.style.display = 'flex';
+        });
+
+        verifyPasswordBtn.addEventListener('click', () => {
+            if (oldPasswordInput.value === defaultPassword) {
+                passwordStep1.style.display = 'none';
+                passwordStep2.style.display = 'block';
+                passwordError.style.display = 'none';
+            } else {
+                passwordError.textContent = 'Incorrect old password.';
+                passwordError.style.display = 'block';
+            }
+        });
+
+        setPasswordBtn.addEventListener('click', () => {
+            if (newPasswordInput.value === '' || confirmPasswordInput.value === '') {
+                 passwordError.textContent = 'Password fields cannot be empty.';
+                 passwordError.style.display = 'block';
+                 return;
+            }
+            if (newPasswordInput.value !== confirmPasswordInput.value) {
+                passwordError.textContent = 'New passwords do not match.';
+                passwordError.style.display = 'block';
+            } else {
+                defaultPassword = newPasswordInput.value;
+                localStorage.setItem('userPassword', defaultPassword); 
+                passwordChangeModal.style.display = 'none';
+                showModal('Success', 'Your password has been changed successfully.');
+                addLogEntry('Admin password changed.', 'success');
+            }
+        });
+
+        passwordChangeModal.addEventListener('click', (e) => {
+            if (e.target === passwordChangeModal) {
+                 passwordChangeModal.style.display = 'none';
+            }
+        });
+
+        enrollBtn.addEventListener('click', () => {
+            const name = document.getElementById('fingerprint-name').value;
+            const id = document.getElementById('fingerprint-id').value;
+            if (!name || !id || id < 1) {
+                showModal('Invalid Input', 'Please enter a valid name and a positive ID.');
+                return;
+            }
+            modalInstruction.textContent = 'Connecting to sensor...';
+            enrollModal.style.display = 'flex';
+            websocket.send(JSON.stringify({ command: 'enroll', id: parseInt(id), name: name }));
+        });
+        
+        deleteAllBtn.addEventListener('click', async () => {
+            const confirmed = await showConfirm('Confirm Delete All', 'ARE YOU SURE?\nThis will permanently delete all fingerprints from the device.');
+            if (confirmed) {
+                addLogEntry('Delete All command sent.', 'command');
+                websocket.send(JSON.stringify({ command: 'delete_all' }));
+            }
+        });
+
+        deleteLogBtn.addEventListener('click', async () => {
+            const confirmed = await showConfirm('Delete Activity Log', 'Are you sure you want to permanently delete the entire activity log? This action cannot be undone.');
+            if (confirmed) {
+                logContainer.innerHTML = '';
+                localStorage.removeItem('activityLog');
+                addLogEntry('Activity log cleared by user.', 'info');
+            }
+        });
+
+        lockBtn.addEventListener('click', () => websocket.send(JSON.stringify({ command: 'lock' })));
+        unlockBtn.addEventListener('click', () => websocket.send(JSON.stringify({ command: 'unlock' })));
+        
+        refreshBtn.addEventListener('click', () => {
+            if (websocket && websocket.readyState === WebSocket.OPEN) {
+                websocket.send(JSON.stringify({ command: 'get_status' }));
+                websocket.send(JSON.stringify({ command: 'get_fingerprints' }));
+                addLogEntry('Requested status and fingerprint list update.', 'info');
+            } else {
+                showModal('Connection Error', 'Not connected to the device. Please wait for reconnection.');
+            }
+        });
+
+        downloadLogBtn.addEventListener('click', () => {
+            const logEntries = logContainer.querySelectorAll('.log-entry');
+            if (logEntries.length === 0) {
+                showModal('Info', 'Activity log is empty.');
+                return;
+            }
+
+            const reversedEntries = Array.from(logEntries).reverse();
+            const rows = [["Timestamp", "Type", "Message"]]; 
+
+            reversedEntries.forEach(entry => {
+                const time = entry.querySelector('.log-time').textContent;
+                const fullMessage = entry.querySelector('span:last-child').textContent;
+                let type = 'Info', message = fullMessage;
+
+                if (fullMessage.startsWith('✅')) { type = 'Success'; message = fullMessage.substring(2).trim(); }
+                else if (fullMessage.startsWith('❌')) { type = 'Error'; message = fullMessage.substring(2).trim(); }
+                else if (fullMessage.startsWith('➡️')) { message = fullMessage.substring(2).trim(); }
+                
+                rows.push([`"${time}"`, `"${type}"`, `"${message.replace(/"/g, '""')}"`]);
+            });
+
+            const csvContent = rows.map(e => e.join(",")).join("\n");
+
+            try {
+                const newWindow = window.open();
+                if (!newWindow) {
+                    showModal('Download Failed', 'Could not open a new window. Please check your browser\'s pop-up blocker settings.');
+                    addLogEntry('CSV download failed: Pop-up was blocked.', 'error');
+                    return;
+                }
+                newWindow.document.write('<pre>' + csvContent + '</pre>');
+                newWindow.document.close();
+                addLogEntry('CSV data opened in a new tab for manual saving.', 'info');
+            } catch (e) {
+                console.error("Failed to open data in new window:", e);
+                showModal("Error", "An error occurred while trying to display the CSV data.");
+                addLogEntry('CSV download failed: An unexpected error occurred.', 'error');
+            }
+        });
+
+        // --- WIFI LOGIC ---
+        manualConnectBtn.addEventListener('click', () => {
+            const ssid = manualSsidInput.value;
+            const password = manualPasswordInput.value;
+            if (!ssid) {
+                showModal('Input Required', 'Network Name (SSID) cannot be empty.');
+                return;
+            }
+            websocket.send(JSON.stringify({ command: 'connect_wifi', ssid: ssid, password: password }));
+            showModal('Connecting...', `Sending connection request for ${ssid}. The device will restart if successful.`);
+        });
+
+        toggleWifiPasswordBtn.addEventListener('click', () => {
+            const type = manualPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            manualPasswordInput.setAttribute('type', type);
+            toggleWifiPasswordBtn.querySelector('i').classList.toggle('fa-eye');
+            toggleWifiPasswordBtn.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+
+    });
+</script>
+</body>
+</html>
+
